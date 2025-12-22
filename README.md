@@ -9,4 +9,4 @@ The original code is based on Houston2013 dataset.<br />
 
 # Contact Information
 Lulu Shi: nudtersll@126.com<br />
-Lulu Shi is She is currently pursuing the Ph.D. degree in Engineering with the School of Artificial Intelligence and Robotics, Hunan University, Changsha, China. 
+Lulu Shi is currently pursuing the Ph.D. degree in Engineering with the School of Artificial Intelligence and Robotics, Hunan University, Changsha, China. 
