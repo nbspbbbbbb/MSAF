@@ -53,6 +53,16 @@ def record_output(oa_ae, aa_ae, kappa_ae, element_acc_ae,train,test,infer, macs,
     f.write(sentence8)
     sentence9 = "Standard deviation of all elements in confusion matrix: " + str(element_std) + '\n' + '\n'
     f.write(sentence9)
+    sentence9_1 = "Per-class accuracy (%): "
+    for i, acc in enumerate(element_mean):
+        sentence9_1 += f"C{i}:{acc * 100:.2f} "
+    sentence9_1 += '\n'
+    f.write(sentence9_1)
+    sentence9_2 = "Per-class accuracy with std (%): "
+    for i, (acc, std) in enumerate(zip(element_mean, element_std)):
+        sentence9_2 += f"C{i}:{acc * 100:.2f}±{std * 100:.2f} "
+    sentence9_2 += '\n' + '\n'
+    f.write(sentence9_2)
     element_mean = list(element_mean)
     element_mean.extend([np.mean(oa_ae),np.mean(aa_ae),np.mean(kappa_ae)])
     element_std = list(element_std)

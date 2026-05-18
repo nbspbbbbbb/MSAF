@@ -12,12 +12,18 @@ import torch.nn.functional as F
 from torchvision import models
 
 
+def _build_mobilenet_v3_small(use_pretrained=True):
+    if use_pretrained:
+        return models.mobilenet_v3_small(pretrained=True)
+    return models.mobilenet_v3_small(weights=None)
+
+
 class HSI_CNN(nn.Module):
 
-    def __init__(self,in_channels):
+    def __init__(self, in_channels, use_pretrained=True):
         super().__init__()
         
-        self._model = models.mobilenet_v3_small(pretrained=True)
+        self._model = _build_mobilenet_v3_small(use_pretrained=use_pretrained)
         _tmp1 = self._model.features[0][0]
         _tmp2 = self._model.features[1].block[0][0]
 
@@ -34,10 +40,10 @@ class HSI_CNN(nn.Module):
 
 class Lidar_CNN(nn.Module):
 
-    def __init__(self, in_channels):
+    def __init__(self, in_channels, use_pretrained=False):
         super().__init__()
 
-        self._model = models.mobilenet_v3_small()
+        self._model = _build_mobilenet_v3_small(use_pretrained=use_pretrained)
 
         _tmp1 = self._model.features[0][0]
         _tmp2 = self._model.features[1].block[0][0]
@@ -203,7 +209,6 @@ class MVT(nn.Module):
         
         bz = lidar_tensor.shape[0]
         # h, w = lidar_tensor.shape[2:4]
-        breakpoint()
         h = self.block_h    # 5
         w = self.block_w    # 5
         
@@ -239,14 +244,14 @@ class MVT(nn.Module):
 class MCF(nn.Module):
 
 
-    def __init__(self, HSIband, lidarband, num_classes):
+    def __init__(self, HSIband, lidarband, num_classes, use_pretrained=True):
         super().__init__()
 
         self.avgpool = nn.AdaptiveAvgPool2d((5, 5))
         self.avgpool_2 = nn.AdaptiveAvgPool2d((5, 5))
         
-        self.image_encoder = HSI_CNN(HSIband)
-        self.lidar_encoder = Lidar_CNN(lidarband)
+        self.image_encoder = HSI_CNN(HSIband, use_pretrained=use_pretrained)
+        self.lidar_encoder = Lidar_CNN(lidarband, use_pretrained=False)
 
         self.mlp_head = nn.Linear(24, num_classes)
         torch.nn.init.xavier_uniform_(self.mlp_head.weight)

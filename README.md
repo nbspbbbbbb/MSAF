@@ -5,6 +5,7 @@
 
 # How to use
 The original code is based on Houston2013 dataset.<br />
+Python script entry: `MSAF_hs.py`.<br />
 
 
 # Contact Information
